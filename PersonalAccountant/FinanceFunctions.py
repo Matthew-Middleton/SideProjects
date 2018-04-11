@@ -15,7 +15,16 @@ class FinanceFunctions:
     def __init__(self):
         self.data = []
 
-    def getBankInfo(self,name=''):
-    #To take bank info and create a file
+    def getBankInfo(self,filename=''):
+    #To get bank info from a file
+        fileCopy = []
+        try:
+            file = open(name, 'r')
+            for inst in file:
+                fileCopy.append(inst)
+        except IOError:
+            print("Error accessing",self.filename)
+        return fileCopy
 
-
+    def setBankInfo(self, name=''):
+        #Take new(initial) bank info and make a file out of it
