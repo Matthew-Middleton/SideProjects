@@ -5,8 +5,6 @@
 #include <time.h>
 #define EXIT_SUCCESS 0
 
-/*Reads input from stdin and returns a number*/
-int input(void);
 /*Populates an array of size n with random integers*/
 void popArr(int n, int *image);
 /*Rotates an array by -pi/2*/
