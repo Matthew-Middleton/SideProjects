@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#define MAX_BUFF_SIZE 100
 #define EXIT_SUCCESS 0
 
 /*Populates an array of size n with random integers*/
@@ -23,7 +24,12 @@ int main()
 	val = strlen(buffer);
 	buffer[strlen(buffer)-1] = '\0';
 	sscanf(buffer, "%d", &val);
-	int image[val][val];
+	if(val>=MAX_BUFF_SIZE || val<0)
+	{
+		printf("Invalid size given.\nEXITING\n");
+		exit(1);
+	}
+	int image[MAX_BUFF_SIZE][MAX_BUFF_SIZE];
 	popArr(val, *image);
 	printArr(val, *image);
 	printf("\n\n");
