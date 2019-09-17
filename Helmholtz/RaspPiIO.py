@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Sep  9 19:19:49 2019
-
 @author: Matthew Middleton
 """
 import serial
 from sys import getsizeof
+import time
 
 class RaspPiIO:
     #holds last instance of sort_input_lists() data
@@ -61,11 +61,13 @@ class RaspPiIO:
         tx_size = 1
         #make a string to allow for floats, objects, and other types
         to_write = ' '.join(map(str, list_data))
-        pi = serial.Serial(port="/dev/ttyAMA0", baudrate=9600, xonxoff=True,
-                           timeout=2)
+        #opens port to Raspberry Pi's serial IO port(Tx,Rx)
+        pi = serial.Serial(port="/dev/ttyAMA0", baudrate=9600, xonxoff=True)
+        time.sleep(2)
         print(pi.name)
-        #transmitting bytes
-        while(tx_size):
-            tx_size = pi.write(to_write)
+        tx_size = pi.write(to_write.encode(encoding = 'ascii'))
+        print("Total size written to pi_boi is {}".format(tx_size))
+        time.sleep(2)
         pi.close()
         return
+      
