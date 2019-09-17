@@ -5,11 +5,13 @@ Created on Mon Sep  9 19:19:49 2019
 @author: Matthew Middleton
 """
 import serial
-import time
+from sys import getsizeof
 
 class RaspPiIO:
-    #holds last instance of sort_input_lists() parameters
+    #holds last instance of sort_input_lists() data
     data = []
+    #bytes in string representation of data
+    data_size = 0
     
     def __init__(self, data = []):
         self = self
@@ -21,7 +23,7 @@ class RaspPiIO:
                         mag_field_y = list, mag_field_z = list):
         #resets data and data_size to empty
         self.data = []
-            
+        
         #create iterables for each list
         dates = iter(time_date)
         mag_x = iter(mag_field_x)
@@ -32,13 +34,24 @@ class RaspPiIO:
         #each set
         for index in range(0, len(time_date), 1):
             temp = next(dates)
-            self.data.append(temp.isoformat(' '))
+            hold = temp.isoformat(' ')
+            self.data_size += getsizeof(hold) - getsizeof('')
+            self.data.append(hold)
+            
             temp = next(mag_x)
-            self.data.append(str(temp))
+            hold = str(temp)
+            self.data_size += getsizeof(hold) - getsizeof('')
+            self.data.append(hold)
+            
             temp = next(mag_y)
-            self.data.append(str(temp))
+            hold = str(temp)
+            self.data_size += getsizeof(hold) - getsizeof('')
+            self.data.append(hold)
+            
             temp = next(mag_z)
-            self.data.append(str(temp))
+            hold = str(temp)
+            self.data_size += getsizeof(hold) - getsizeof('')
+            self.data.append(hold)
         return
     
     """Writes data with UART TxD port on Raspery Pi"""
@@ -48,17 +61,11 @@ class RaspPiIO:
         tx_size = 1
         #make a string to allow for floats, objects, and other types
         to_write = ' '.join(map(str, list_data))
-        pi = serial.Serial(port="/dev/ttyAMA0", baudrate=9600, xonxoff=True)
-        #wait for serial lines to open and sync up
-        time.sleep(2)
+        pi = serial.Serial(port="/dev/ttyAMA0", baudrate=9600, xonxoff=True,
+                           timeout=2)
         print(pi.name)
         #transmitting bytes
         while(tx_size):
             tx_size = pi.write(to_write)
-            time.sleep(2)
         pi.close()
         return
-    
-    
-    
-    
