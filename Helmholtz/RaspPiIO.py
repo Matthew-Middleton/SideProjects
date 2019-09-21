@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Sep  9 19:19:49 2019
+
 @author: Matthew Middleton
 """
-import serial
+import wiringpi
 from sys import getsizeof
-import time
 
 class RaspPiIO:
-    #holds last instance of sort_input_lists() data
-    data = []
-    #bytes in string representation of data
-    data_size = 0
     
     def __init__(self, data = []):
         self = self
+        #holds last instance of sort_input_lists() data
         self.data = data
+        #bytes in string representation of data
+        self.data_size = 0
     
     """Creates a list by placing all indeces from lists next to each
     other"""
@@ -31,11 +30,16 @@ class RaspPiIO:
         mag_z = iter(mag_field_y)
         #iterate through all items in the lists assuming they're of
         #the same size. Also, captures the total byte count of elements w/in
-        #each set
+        #each set; the data of each element is to be considered a string
         for index in range(0, len(time_date), 1):
+            #advances the iterator
             temp = next(dates)
-            hold = temp.isoformat(' ')
+            #makes a string object, in this case in ISO time format
+            hold = temp.isoformat('T')
+            #adds the size of the string hold and subtracts the base size of
+            #a string object
             self.data_size += getsizeof(hold) - getsizeof('')
+            #adds the string to the list
             self.data.append(hold)
             
             temp = next(mag_x)
@@ -55,19 +59,18 @@ class RaspPiIO:
         return
     
     """Writes data with UART TxD port on Raspery Pi"""
-    def output_to_TxD(self, list_data = data):
-        #NOTE: XOFF = 0x13
-        #NOTE: XON = 0x11
-        tx_size = 1
-        #make a string to allow for floats, objects, and other types
+    def output_to_TxD(self, list_data = list):
+        #make a string to allow for multiple data types(strings, int, and float)
         to_write = ' '.join(map(str, list_data))
-        #opens port to Raspberry Pi's serial IO port(Tx,Rx)
-        pi = serial.Serial(port="/dev/ttyAMA0", baudrate=9600, xonxoff=True)
-        time.sleep(2)
-        print(pi.name)
-        tx_size = pi.write(to_write.encode(encoding = 'ascii'))
-        print("Total size written to pi_boi is {}".format(tx_size))
-        time.sleep(2)
-        pi.close()
+        wiringpi.wiringPiSetup()
+        #opens the Raspberry Pi's UART port, w/ a data transfer rate of
+        #115200 bits/s
+        serial = wiringpi.serialOpen('/dev/ttyS0', 115200)
+        #write the string data, as ascii, to the Raspberry Pi
+        wiringpi.serialPuts(serial, to_write.encode('ascii'))
+        #closes the serial port
+        wiringpi.serialClose(serial)
         return
-      
+    
+    
+    
