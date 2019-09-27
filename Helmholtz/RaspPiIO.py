@@ -74,3 +74,4 @@ class RaspPiIO:
     
     
     
+"""send string of each list, start bits, bits for flag sigaling x,y, or z, stop bits"""
