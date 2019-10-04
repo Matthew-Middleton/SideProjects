@@ -96,4 +96,6 @@ class RaspPiIO:
         
         
         
-"""send string of each list, start bits, bits for flag sigaling x,y, or z, stop bits"""
+"""send string of each list, start bits, bits for flag sigaling x,y, or z, stop bits 
+10 min long period scale down time date to 10 min ~35 ms ignore date, 
+use time granularity of 6 (6 digits after 0)""" 
