@@ -74,7 +74,7 @@ class RaspPiIO:
         str_list.append(mag_z_str)
         return str_list
     
-    Writes data with UART TxD port on Raspery Pi
+    """Writes data with UART TxD port on Raspery Pi"""
     def output_to_TxD(self, time_date = str, mag_field_x = str, mag_gield_y =str):
         #make a string to allow for multiple data types(strings, int, and float)
         to_write = ' '.join(map(str, list_data))
