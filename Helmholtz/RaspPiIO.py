@@ -15,9 +15,11 @@ class RaspPiIO:
         self.__data_size = 0
     
     """Creates a list by placing all indeces from lists next to each
-    other"""
-    def sort_input_lists(self, time_date = list, mag_field_x = list,
-                        mag_field_y = list, mag_field_z = list):
+    other, returning said list whose elements are string represenations of the
+    data"""
+    def sort_input_lists(self, time_date, mag_field_x,
+                        mag_field_y, mag_field_z):
+        self.__data_size = 0;
         td_str = ''
         mag_x_str = ''
         mag_y_str = ''
@@ -36,37 +38,43 @@ class RaspPiIO:
             #makes a string object, in this case in ISO time format
             hold = temp.isoformat('T')
             #adds the size of the string hold and subtracts the base size of
-            #a string object
-            self.__data_size += getsizeof(hold) - getsizeof('')
-            #adds the string to the bigger string
+            #a string object, then adds 1 for the space
+            self.__data_size += getsizeof(hold) - getsizeof('') + 1
+            #concatenates iso format datetime object to string, then adds
+            #a space
             td_str += hold
             td_str += ' '
             
             temp = next(mag_x)
+            print(temp)
             hold = str(temp)
-            self.__data_size += getsizeof(hold) - getsizeof('')
+            self.__data_size += getsizeof(hold) - getsizeof('') + 1
             mag_x_str += hold
             mag_x_str += ' '
             
             temp = next(mag_y)
+            print(temp)
             hold = str(temp)
-            self.__data_size += getsizeof(hold) - getsizeof('')
+            self.__data_size += getsizeof(hold) - getsizeof('') + 1
             mag_y_str += hold
             mag_y_str += ' '
-            
+            #z data takes on y data for some reason
             temp = next(mag_z)
+            print(temp)
             hold = str(temp)
-            self.__data_size += getsizeof(hold) - getsizeof('')
+            self.__data_size += getsizeof(hold) - getsizeof('') + 1
             mag_z_str += hold
             mag_z_str += ' '
             
-        str_list = list(td_str)
+        #create an array where each index holds a string
+        str_list = []
+        str_list.append(td_str)
         str_list.append(mag_x_str)
         str_list.append(mag_y_str)
         str_list.append(mag_z_str)
         return str_list
     
-    """Writes data with UART TxD port on Raspery Pi"""
+    Writes data with UART TxD port on Raspery Pi
     def output_to_TxD(self, time_date = str, mag_field_x = str, mag_gield_y =str):
         #make a string to allow for multiple data types(strings, int, and float)
         to_write = ' '.join(map(str, list_data))
@@ -84,4 +92,8 @@ class RaspPiIO:
     def data_size(self):
         return self.__data_size
     
+        
+        
+        
+        
 """send string of each list, start bits, bits for flag sigaling x,y, or z, stop bits"""
