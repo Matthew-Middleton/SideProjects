@@ -28,7 +28,7 @@ class RaspPiIO:
         dates = iter(time_date)
         mag_x = iter(mag_field_x)
         mag_y = iter(mag_field_y)
-        mag_z = iter(mag_field_y)
+        mag_z = iter(mag_field_z)
         #iterate through all items in the lists assuming they're of
         #the same size. Also, captures the total byte count of elements w/in
         #each set; the data of each element is to be considered a string
