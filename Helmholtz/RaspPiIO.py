@@ -64,16 +64,16 @@ class RaspPiIO:
         #sleep a few seconds to make sure the port opens and sets connections
         #properly
         sleep(2)
-        #signals to start data transmission
-        wiringpi.serialPuts(serial, 'EOH'.encode('ascii'))
+        #signals to start data transmission, uses char 1
+        wiringpi.serialPuts(serial, chr(1).encode('ascii'))
         wiringpi.serialPuts(serial, data[0].encode('ascii'))
         for index in range(1, len(data), 1):
-            #signals that the next data is being sent
-            wiringpi.serialPuts(serial, 'STX'.encode('ascii'))
+            #signals that the next data is being sent, uses char 2
+            wiringpi.serialPuts(serial, chr(2).encode('ascii'))
             #write the string data, as ascii, to the Raspberry Pi
             wiringpi.serialPuts(serial, data[index].encode('ascii'))
-        #signals that data transmission is ending
-        wiringpi.serialPuts(serial, 'EOT'.encode('ascii'))
+        #signals that data transmission is ending, uses char 4
+        wiringpi.serialPuts(serial, chr(4).encode('ascii'))
         #closes the serial port
         wiringpi.serialClose(serial)
         return
