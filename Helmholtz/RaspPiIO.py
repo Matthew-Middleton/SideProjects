@@ -31,20 +31,21 @@ class RaspPiIO:
         #we chose data_points-1 to account for starting at time=0
         delta_t = time_to_run/(len(mag_field_x)-1)
         
-        #makes a string out of each data list and adds the number of bytes to 
+        #makes a string out of each data list where each data value
+        #has a precision of 6 and adds the number of bytes to 
         #a field which can be accessed later via a getter, data_size()
-        mag_x_str = ' '.join(map(str, mag_field_x))
+        mag_x_str = ' '.join(map(str, "{:.6f}".format(mag_field_x)))
         self.__data_size += getsizeof(mag_x_str) - getsizeof('')
         
-        mag_y_str = ' '.join(map(str, mag_field_y))
+        mag_y_str = ' '.join(map(str, "{:.6f}".format(mag_field_y)))
         self.__data_size += getsizeof(mag_y_str) - getsizeof('')
         
-        mag_z_str = ' '.join(map(str, mag_field_z))
+        mag_z_str = ' '.join(map(str, "{:.6f}".format(mag_field_z)))
         self.__data_size += getsizeof(mag_z_str) - getsizeof('')
         
         #create an array where each index holds a string
         str_list = []
-        str_list.append(str(delta_t))
+        str_list.append("{:.6f}".format(str(delta_t)))
         str_list.append(mag_x_str)
         str_list.append(mag_y_str)
         str_list.append(mag_z_str)
