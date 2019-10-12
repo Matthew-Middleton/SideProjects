@@ -18,19 +18,19 @@ class RaspPiIO:
             it's second index is the string of mag_field_x
             third index is the string of mag_field_y
             fourth index is the string of mag_field_z"""
-    def sort_input_lists(self, time_to_run = int, mag_field_x = list,
+    def sort_input_lists(self, time_to_run = float, mag_field_x = list,
                         mag_field_y = list, mag_field_z = list):
-        
+        list_length = len(mag_field_x)
         #calculates delta_t: delta_t is the time by which each test should be
         #run for based of the total number of data_points-1
         #we chose data_points-1 to account for starting at time=0
-        delta_t = time_to_run/(len(mag_field_x)-1)
+        delta_t = float(time_to_run)/(list_length-1)
         mag_x_str = ''
         mag_y_str = ''
         mag_z_str = ''
         #makes a string out of each data list where each data value
         #has a precision of 6
-        for index in range(0, len(mag_field_x), 1):
+        for index in range(0, list_length, 1):
             mag_x_str += '{:.6f}'.format(mag_field_x[index])
             mag_x_str += ' '
             mag_y_str += '{:.6f}'.format(mag_field_y[index])
